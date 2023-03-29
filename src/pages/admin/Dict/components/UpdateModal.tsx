@@ -1,17 +1,17 @@
-import {ProTable} from '@ant-design/pro-components';
-import type {ProColumns, ProFormInstance} from '@ant-design/pro-components';
-import {Modal} from 'antd';
-import React, {useEffect, useRef} from 'react';
+import type { ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import { Modal } from 'antd';
+import React, { useEffect, useRef } from 'react';
 
 export type Props = {
-  columns: ProColumns<API.InterfaceInfo>[];
-  values: API.InterfaceInfo;
+  columns: ProColumns<API.DictType>[];
+  values: API.DictType;
   onCancel: () => void;
-  onSubmit: (values: API.InterfaceInfo) => Promise<void>;
+  onSubmit: (values: API.DictTypeUpdateRequest) => Promise<boolean>;
   visible: boolean;
 };
 const UpdateModal: React.FC<Props> = (props) => {
-  const {columns, values, visible, onCancel, onSubmit} = props;
+  const { columns, values, visible, onCancel, onSubmit } = props;
 
   const formRef = useRef<ProFormInstance>();
 
@@ -19,7 +19,7 @@ const UpdateModal: React.FC<Props> = (props) => {
     if (formRef) {
       formRef.current?.setFieldsValue(values);
     }
-  }, [values])
+  }, [values]);
 
   return (
     <Modal
@@ -34,8 +34,7 @@ const UpdateModal: React.FC<Props> = (props) => {
         formRef={formRef}
         columns={columns}
         onSubmit={async (val) => {
-          console.log(val);
-          onSubmit?.(val);
+          onSubmit?.(val as API.DictTypeUpdateRequest);
         }}
       ></ProTable>
     </Modal>

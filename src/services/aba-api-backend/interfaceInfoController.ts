@@ -2,12 +2,12 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
-/** updateInterfaceInfo PUT /api/interface-info */
+/** updateInterfaceInfo PUT /api/interface/info */
 export async function updateInterfaceInfoUsingPUT(
   body: API.InterfaceInfoUpdateDTO,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultboolean>('/api/interface-info', {
+  return request<API.ResponseResultboolean>('/api/interface/info', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -17,12 +17,12 @@ export async function updateInterfaceInfoUsingPUT(
   });
 }
 
-/** addInterfaceInfo POST /api/interface-info */
+/** addInterfaceInfo POST /api/interface/info */
 export async function addInterfaceInfoUsingPOST(
-  body: API.InterfaceInfoAddDTO,
+  body: API.InterfaceInfoAddRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultlong>('/api/interface-info', {
+  return request<API.ResponseResultlong>('/api/interface/info', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,12 +32,12 @@ export async function addInterfaceInfoUsingPOST(
   });
 }
 
-/** deleteInterfaceInfo DELETE /api/interface-info */
+/** deleteInterfaceInfo DELETE /api/interface/info */
 export async function deleteInterfaceInfoUsingDELETE(
   body: API.DeleteDTO,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultboolean>('/api/interface-info', {
+  return request<API.ResponseResultboolean>('/api/interface/info', {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -47,55 +47,55 @@ export async function deleteInterfaceInfoUsingDELETE(
   });
 }
 
-/** getInterfaceInfoById GET /api/interface-info/${param0} */
+/** getInterfaceInfoById GET /api/interface/info/${param0} */
 export async function getInterfaceInfoByIdUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getInterfaceInfoByIdUsingGETParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ResponseResultInterfaceInfo>(`/api/interface-info/${param0}`, {
+  return request<API.ResponseResultInterfaceInfoVO>(`/api/interface/info/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** offlineInterfaceInfo POST /api/interface-info/${param0}/offline */
+/** offlineInterfaceInfo POST /api/interface/info/${param0}/offline */
 export async function offlineInterfaceInfoUsingPOST(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.offlineInterfaceInfoUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ResponseResultboolean>(`/api/interface-info/${param0}/offline`, {
+  return request<API.ResponseResultboolean>(`/api/interface/info/${param0}/offline`, {
     method: 'POST',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** onlineInterfaceInfo POST /api/interface-info/${param0}/online */
+/** onlineInterfaceInfo POST /api/interface/info/${param0}/online */
 export async function onlineInterfaceInfoUsingPOST(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.onlineInterfaceInfoUsingPOSTParams,
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<API.ResponseResultboolean>(`/api/interface-info/${param0}/online`, {
+  return request<API.ResponseResultboolean>(`/api/interface/info/${param0}/online`, {
     method: 'POST',
     params: { ...queryParams },
     ...(options || {}),
   });
 }
 
-/** listInterfaceInfo GET /api/interface-info/list */
+/** listInterfaceInfo GET /api/interface/info/list */
 export async function listInterfaceInfoUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listInterfaceInfoUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultListInterfaceInfo>('/api/interface-info/list', {
+  return request<API.ResponseResultListInterfaceInfo>('/api/interface/info/list', {
     method: 'GET',
     params: {
       ...params,
@@ -104,13 +104,13 @@ export async function listInterfaceInfoUsingGET(
   });
 }
 
-/** getInterfaceInfoPages GET /api/interface-info/page */
+/** getInterfaceInfoPages GET /api/interface/info/page */
 export async function getInterfaceInfoPagesUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getInterfaceInfoPagesUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultPageInterfaceInfo>('/api/interface-info/page', {
+  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/page', {
     method: 'GET',
     params: {
       ...params,

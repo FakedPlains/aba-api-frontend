@@ -47,13 +47,36 @@ export default [
         path: '/admin/user',
         name: '用户管理',
         icon: 'user',
-        component: './admin/User'
+        component: './admin/User',
       },
       {
         path: '/admin/interface-info',
         name: '接口管理',
         icon: 'appstore',
-        component: './admin/InterfaceInfo',
+        routes: [
+          {
+            path: '/admin/interface-info',
+            redirect: '/admin/interface-info/list',
+          },
+          {
+            path: '/admin/interface-info/list',
+            name: '接口列表',
+            component: './admin/InterfaceInfo',
+            hideInMenu: true,
+          },
+          {
+            path: '/admin/interface-info/create',
+            name: '创建接口',
+            component: './admin/InterfaceInfo/InterfaceInfo',
+            hideInMenu: true,
+          },
+          {
+            path: '/admin/interface-info/update/:id',
+            name: '修改接口',
+            component: './admin/InterfaceInfo/InterfaceInfo',
+            hideInMenu: true,
+          },
+        ],
       },
       {
         path: '/admin/dict',

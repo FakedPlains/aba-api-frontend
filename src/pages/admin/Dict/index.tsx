@@ -1,107 +1,59 @@
-import {Button, message, Popconfirm, Result} from "antd";
-import React, {useEffect, useRef, useState} from "react";
-import type {Key} from "react";
-import {
-  ModalForm,
-  PageContainer, ProFormInstance,
-  ProFormText, ProFormTextArea,
-  ProTable,
-} from "@ant-design/pro-components";
-import type {ActionType, ProColumns} from "@ant-design/pro-components";
-import {DeleteOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons";
 import {
   addDictTypeUsingPOST,
   deleteDictTypeUsingDELETE,
-  getAllDictTypeUsingGET, updateDictTypeUsingPUT
-} from "@/services/aba-api-backend/dictTypeController";
-import {getDictDataByTypeUsingGET} from "@/services/aba-api-backend/dictDataController";
+  getAllDictTypeUsingGET,
+  updateDictTypeUsingPUT,
+} from '@/services/aba-api-backend/dictTypeController';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import {
+  EditableProTable,
+  PageContainer,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-components';
+import { Button, message, Popconfirm, Result, Tooltip } from 'antd';
+import type { Key } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+// import {getDictDataByTypeUsingGET} from "@/services/aba-api-backend/dictDataController";
+// import CreateModal from "@/pages/admin/Dict/components/CreateModal";
+import CreateModal from './components/CreateModal';
+import UpdateModal from './components/UpdateModal';
 
-
-const columns: ProColumns<API.UserVO>[] = [
+const dictTypeColumns: ProColumns<API.DictType>[] = [
   {
-    dataIndex: 'index',
-    valueType: 'index',
-    width: 48,
+    title: '名称',
+    dataIndex: 'name',
+    renderFormItem: () => (
+      <ProFormText name={'name'} placeholder={'请输入名称'} fieldProps={{ maxLength: 20 }} />
+    ),
   },
   {
-    title: '用户名',
-    dataIndex: 'userName',
-  },
-  {
-    title: '用户账号',
-    dataIndex: 'userAccount',
-  },
-  {
-    title: '用户性别',
-    dataIndex: 'gender',
-  },
-  {
-    title: '用户角色',
-    dataIndex: 'userRole',
-  },
-  {
-    title: '创建时间',
-    // key: 'showTime',
-    dataIndex: 'createTime',
-    valueType: 'dateTime',
-    sorter: true,
-    hideInSearch: true,
-    hideInForm: true,
-    editable: false,
-  },
-  {
-    title: '更新时间',
-    // key: 'showTime',
-    dataIndex: 'updateTime',
-    valueType: 'dateTime',
-    sorter: true,
-    hideInSearch: true,
-    hideInForm: true,
-    editable: false,
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    valueType: 'dateRange',
-    hideInTable: true,
-    hideInForm: true,
-    search: {
-      transform: (value) => {
-        return {
-          startTime: value[0],
-          endTime: value[1],
-        };
-      },
-    },
-  },
-  {
-    title: '操作',
-    valueType: 'option',
-    key: 'option',
-    render: (text, record, _, action) => [
-      <a
-        key="editable"
-        onClick={() => {
-          action?.startEditable?.(record.id as Key);
-        }}
-      >
-        编辑
-      </a>,
-    ],
+    title: '描述',
+    dataIndex: 'description',
+    renderFormItem: () => (
+      <ProFormTextArea
+        name={'description'}
+        placeholder={'请输入描述'}
+        fieldProps={{ maxLength: 100 }}
+      />
+    ),
   },
 ];
 
 const User: React.FC = () => {
-  const [dictTypeModalVisit, setDictTypeModalVisit] = useState<boolean>(false);
-  const [dictTypeMode, setDictTypeMode] = useState<string>("add");
-  const addDictTypeFormRef = useRef<ProFormInstance>();
-  const [dictTypes, setDictTypes] = useState<API.DictType[]>([])
+  const [addDictTypeModalVisit, setAddDictTypeModalVisit] = useState<boolean>(false);
+  const [updateDictTypeModalVisit, setUpdateDictTypeModalVisit] = useState<boolean>(false);
+  const [dictTypes, setDictTypes] = useState<API.DictType[]>([]);
+  const [currentDictType, setCurrentDictType] = useState<API.DictType>();
+  const [activeKey, setActiveKey] = useState<string>();
   const actionRef = useRef<ActionType>();
 
   const loadDictType = async () => {
     try {
       const res = await getAllDictTypeUsingGET();
       setDictTypes(res?.data || []);
+      setActiveKey(dictTypes.length === 0 ? '' : '0');
     } catch (e: any) {
       message.error('加载失败，' + e.message);
     }
@@ -109,16 +61,20 @@ const User: React.FC = () => {
 
   useEffect(() => {
     loadDictType();
-  }, [])
+  }, []);
 
   const mapDictTypeToTabs = () => {
-    return dictTypes.map(dictType => {
+    return dictTypes.map((dictType, index) => {
       return {
-        key: String(dictType.id),
-        label: dictType.name,
-      }
-    })
-  }
+        key: String(index),
+        label: (
+          <Tooltip title={dictType.description}>
+            <span>{dictType.name}</span>
+          </Tooltip>
+        ),
+      };
+    });
+  };
 
   const handleAddDictType = async (fields: API.DictTypeAddRequest) => {
     const hide = message.loading('正在添加');
@@ -128,9 +84,9 @@ const User: React.FC = () => {
       });
       hide();
       message.success('添加成功');
-      setDictTypeModalVisit(false);
+      setAddDictTypeModalVisit(false);
       await loadDictType();
-      addDictTypeFormRef.current?.resetFields();
+      // dictTypeFormRef.current?.resetFields();
       actionRef.current?.reload();
       return true;
     } catch (error: any) {
@@ -163,9 +119,11 @@ const User: React.FC = () => {
     try {
       await updateDictTypeUsingPUT({
         ...fields,
+        id: Number(currentDictType?.id),
       });
       hide();
       message.success('更新成功');
+      setUpdateDictTypeModalVisit(false);
       await loadDictType();
       actionRef.current?.reload();
       return true;
@@ -176,7 +134,48 @@ const User: React.FC = () => {
     }
   };
 
-  const [activeKey, setActiveKey] = useState<string>('1');
+  const columns: ProColumns<API.DictData>[] = [
+    {
+      title: '名称',
+      dataIndex: 'name',
+    },
+    {
+      title: '值',
+      dataIndex: 'value',
+    },
+    {
+      title: '编码',
+      dataIndex: 'code',
+    },
+    {
+      title: '样式',
+      dataIndex: 'style',
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      key: 'option',
+      render: (text, record, _, action) => [
+        <Button
+          key="editable"
+          type={'link'}
+          icon={<EditOutlined />}
+          onClick={() => {
+            action?.startEditable?.(record.id as Key);
+          }}
+        />,
+        <Popconfirm
+          key={'delete'}
+          title="确定删除？"
+          onConfirm={() => handleDeleteDictType({ id: Number(currentDictType?.id) })}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key="primary" danger type="link" icon={<DeleteOutlined />} />
+        </Popconfirm>,
+      ],
+    },
+  ];
 
   return (
     <div
@@ -187,49 +186,68 @@ const User: React.FC = () => {
       <PageContainer
         header={{
           extra: [
-            <Button key="button" icon={<PlusOutlined/>} type="primary" onClick={() => setDictTypeModalVisit(true)}>
+            <Button
+              key="button"
+              icon={<PlusOutlined />}
+              type="primary"
+              onClick={() => setAddDictTypeModalVisit(true)}
+            >
               新建字典
             </Button>,
-          ]
+          ],
         }}
       >
-        {dictTypes.length === 0 ?
+        {dictTypes.length === 0 ? (
           <Result
             title="暂无字典数据"
             extra={
-              <Button key="button" icon={<PlusOutlined/>} type="primary" onClick={() => setDictTypeModalVisit(true)}>
+              <Button
+                key="button"
+                icon={<PlusOutlined />}
+                type="primary"
+                onClick={() => setAddDictTypeModalVisit(true)}
+              >
                 新建字典
               </Button>
             }
-          /> :
-          <ProTable<API.DictData>
+          />
+        ) : (
+          <EditableProTable<API.DictData>
+            rowKey="id"
+            dateFormatter="string"
+            headerTitle="字典数据"
             columns={columns}
             actionRef={actionRef}
-            cardBordered
             toolbar={{
               menu: {
                 type: 'tab',
-                activeKey: activeKey,
+                activeKey,
                 items: mapDictTypeToTabs(),
-                onChange: (key) => {
-                  setActiveKey(key as string);
-                },
+                onChange: (key) => setActiveKey(String(key)),
               },
               actions: [
-                <Button key="primary" type="link" icon={<EditOutlined/>}/>,
+                <Button
+                  key="primary"
+                  type="link"
+                  icon={<EditOutlined />}
+                  onClick={() => {
+                    setCurrentDictType(dictTypes[Number(activeKey)]);
+                    setUpdateDictTypeModalVisit(true);
+                  }}
+                />,
                 <Popconfirm
-                  key={"delete"}
+                  key={'delete'}
                   title="确定删除？"
-                  onConfirm={() => handleDeleteDictType({id: Number(activeKey)})}
+                  onConfirm={() => handleDeleteDictType({ id: Number(currentDictType?.id) })}
                   okText="确定"
                   cancelText="取消"
                 >
-                  <Button key="primary" danger type="link" icon={<DeleteOutlined/>}/>
+                  <Button key="primary" danger type="link" icon={<DeleteOutlined />} />
                 </Popconfirm>,
               ],
             }}
             search={false}
-            request={async (params = {}, sort, filter) => {
+            /*request={async (params = {}, sort, filter) => {
               console.log(sort, filter);
               const res = await getDictDataByTypeUsingGET({typeId: 0});
               if (res.data) {
@@ -244,61 +262,36 @@ const User: React.FC = () => {
                 success: false,
                 total: 0,
               };
-            }}
-            /*editable={{
-              onSave: (key: number, record: API.UserVO, originRow: API.UserVO) => {
-                return handleUpdate({...record, id: key})
-              },
-              onDelete: (key) => {
-                return handleDelete({id: key as number})
-              }
             }}*/
-            columnsState={{
-              persistenceKey: 'pro-table-singe-demos',
-              persistenceType: 'localStorage',
-              onChange(value) {
-                console.log('value: ', value);
-              },
+            recordCreatorProps={{
+              record: () => ({ id: Date.now() }),
             }}
-            rowKey="id"
-            options={{
-              setting: {
-                listsHeight: 400,
-              },
-            }}
-            form={{
-              // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-              syncToUrl: (values, type) => {
-                if (type === 'get') {
-                  return {
-                    ...values,
-                    created_at: [values.startTime, values.endTime],
-                  };
-                }
-                return values;
-              },
-            }}
-            pagination={{
-              pageSize: 5,
-              onChange: (page) => console.log(page),
-            }}
-            dateFormatter="string"
-            headerTitle="字典数据"
+            editable={
+              {
+                /*onSave: (key: number, record: API.DictData, originRow: API.DictData) => {
+                // return handleUpdate({...record, id: key})
+              },*/
+              }
+            }
           />
-        }
-        <ModalForm
-          title="添加字典"
-          formRef={addDictTypeFormRef}
-          open={dictTypeModalVisit}
-          onFinish={handleAddDictType}
-          onOpenChange={setDictTypeModalVisit}
-        >
-          <ProFormText name="name" label="名称" fieldProps={{maxLength: 20}} placeholder="请输入名称"/>
-          <ProFormTextArea name="desc" label="描述" fieldProps={{maxLength: 100}} placeholder="请输入描述"/>
-        </ModalForm>
+        )}
+
+        <CreateModal
+          columns={dictTypeColumns}
+          onCancel={() => setAddDictTypeModalVisit(false)}
+          onSubmit={handleAddDictType}
+          visible={addDictTypeModalVisit}
+        />
+        <UpdateModal
+          columns={dictTypeColumns}
+          values={currentDictType || {}}
+          onCancel={() => setUpdateDictTypeModalVisit(false)}
+          onSubmit={handleUpdateDictType}
+          visible={updateDictTypeModalVisit}
+        />
       </PageContainer>
     </div>
   );
-}
+};
 
 export default User;

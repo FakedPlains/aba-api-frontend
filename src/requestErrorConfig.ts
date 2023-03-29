@@ -1,4 +1,5 @@
-﻿import type { RequestConfig } from '@umijs/max';
+﻿import { RequestOptions } from '@@/plugin-request/request';
+import type { RequestConfig } from '@umijs/max';
 
 // 与后端约定的响应数据格式
 interface ResponseStructure {
@@ -16,12 +17,12 @@ interface ResponseStructure {
 export const errorConfig: RequestConfig = {
   // 请求拦截器
   requestInterceptors: [
-    (url: string, options: RequestConfig) => {
-      const token = localStorage.getItem("token")
-      const authHeader = { authorization: token || "" };
+    (config: RequestOptions) => {
+      const token = localStorage.getItem('token');
+      const headers = { ...config.headers, authorization: token || '' };
       return {
-        url: `${url}`,
-        options: { ...options, interceptors: true, headers: authHeader },
+        ...config,
+        headers,
       };
     },
   ],
@@ -31,7 +32,7 @@ export const errorConfig: RequestConfig = {
     (response) => {
       // 拦截响应数据，进行个性化处理
       const { data } = response as unknown as ResponseStructure;
-      console.log(response)
+      console.log(response);
 
       if (!data.success) {
         throw new Error(data.message);

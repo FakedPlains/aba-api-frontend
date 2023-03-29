@@ -29,17 +29,27 @@ declare namespace API {
   };
 
   type DictTypeAddRequest = {
-    desc?: string;
+    description?: string;
     name: string;
   };
 
   type DictTypeUpdateRequest = {
-    desc?: string;
+    description?: string;
     id: number;
     name?: string;
   };
 
+  type ErrorCode = {
+    description?: string;
+    name: string;
+  };
+
   type getDictDataByTypeUsingGETParams = {
+    /** typeId */
+    typeId: number;
+  };
+
+  type getDictTypeByIdUsingGETParams = {
     /** typeId */
     typeId: number;
   };
@@ -97,28 +107,29 @@ declare namespace API {
   };
 
   type InterfaceInfo = {
+    contentType?: number;
     createTime?: string;
+    dataId?: string;
     description?: string;
     id?: number;
     isDelete?: number;
-    method?: string;
+    method?: number;
     name?: string;
-    requestHeader?: string;
-    requestParams?: string;
-    responseHeader?: string;
     status?: number;
     updateTime?: string;
     url?: string;
     userId?: number;
   };
 
-  type InterfaceInfoAddDTO = {
+  type InterfaceInfoAddRequest = {
+    contentType: number;
     description?: string;
-    method: string;
+    errorCode?: ErrorCode[];
+    method: number;
     name: string;
-    requestHeader?: string;
-    requestParams: string;
-    responseHeader?: string;
+    requestHeaders?: RequestHeader[];
+    requestParams?: RequestParam[];
+    responseParams?: ResponseParam[];
     url: string;
   };
 
@@ -132,6 +143,40 @@ declare namespace API {
     responseHeader?: string;
     status?: number;
     url?: string;
+  };
+
+  type InterfaceInfoVO = {
+    contentType?: number;
+    createTime?: string;
+    dataId?: string;
+    description?: string;
+    errorCode?: InterfaceParam[];
+    id?: number;
+    isDelete?: number;
+    method?: number;
+    name?: string;
+    requestHeaders?: InterfaceParam[];
+    requestParams?: InterfaceParam[];
+    responseParams?: InterfaceParam[];
+    status?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type InterfaceParam = {
+    createTime?: string;
+    description?: string;
+    id: number;
+    interfaceInfoId?: number;
+    isDelete?: number;
+    isRequired?: number;
+    maxLength?: number;
+    name?: string;
+    parentId?: number;
+    style?: number;
+    type?: number;
+    updateTime?: string;
   };
 
   type listInterfaceInfoUsingGETParams = {
@@ -233,6 +278,27 @@ declare namespace API {
     total?: number;
   };
 
+  type RequestHeader = {
+    description?: string;
+    isRequired?: number;
+    name: string;
+  };
+
+  type RequestParam = {
+    description?: string;
+    isRequired?: number;
+    maxLength?: number;
+    name: string;
+    style?: number;
+    type?: number;
+  };
+
+  type ResponseParam = {
+    description?: string;
+    name: string;
+    type?: number;
+  };
+
   type ResponseResultboolean = {
     code?: string;
     data?: boolean;
@@ -241,9 +307,17 @@ declare namespace API {
     timestamp?: number;
   };
 
-  type ResponseResultInterfaceInfo = {
+  type ResponseResultDictType = {
     code?: string;
-    data?: InterfaceInfo;
+    data?: DictType;
+    message?: string;
+    success?: boolean;
+    timestamp?: number;
+  };
+
+  type ResponseResultInterfaceInfoVO = {
+    code?: string;
+    data?: InterfaceInfoVO;
     message?: string;
     success?: boolean;
     timestamp?: number;

@@ -54,3 +54,17 @@ export async function deleteDictTypeUsingDELETE(
     ...(options || {}),
   });
 }
+
+/** getDictTypeById GET /api/dict/type/${param0} */
+export async function getDictTypeByIdUsingGET(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getDictTypeByIdUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  const { typeId: param0, ...queryParams } = params;
+  return request<API.ResponseResultDictType>(`/api/dict/type/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}

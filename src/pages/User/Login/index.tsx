@@ -1,4 +1,5 @@
 import Footer from '@/components/Footer';
+import { loginUsingPOST } from '@/services/aba-api-backend/userController';
 import { getFakeCaptcha } from '@/services/ant-design-pro/login';
 import {
   AlipayCircleOutlined,
@@ -15,12 +16,11 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { FormattedMessage, history, SelectLang, useIntl, useModel, Helmet } from '@umijs/max';
+import { FormattedMessage, Helmet, history, SelectLang, useIntl, useModel } from '@umijs/max';
 import { Alert, message, Tabs } from 'antd';
-import Settings from '../../../../config/defaultSettings';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
-import {loginUsingPOST} from "@/services/aba-api-backend/userController";
+import Settings from '../../../../config/defaultSettings';
 
 const ActionIcons = () => {
   const langClassName = useEmotionCss(({ token }) => {
@@ -123,6 +123,7 @@ const Login: React.FC = () => {
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
+        localStorage.setItem('token', msg.data || '');
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
         const urlParams = new URL(window.location.href).searchParams;
