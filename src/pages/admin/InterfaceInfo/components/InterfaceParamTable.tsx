@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 export type Props = {
   columns: ProColumns<API.InterfaceParam>[];
-  values: API.InterfaceParam[];
+  values: readonly API.InterfaceParam[];
   setValues: (values: API.InterfaceParam[]) => void;
 };
 
@@ -18,7 +18,7 @@ const InterfaceParamTable: React.FC<Props> = (props) => {
     <EditableProTable<API.InterfaceParam>
       rowKey="id"
       columns={columns}
-      dataSource={values}
+      value={values}
       recordCreatorProps={{
         newRecordType: 'dataSource',
         position: 'top',
@@ -26,18 +26,12 @@ const InterfaceParamTable: React.FC<Props> = (props) => {
           id: Date.now(),
         }),
       }}
+      onChange={(values) => setValues([...values])}
       editable={{
         type: 'multiple',
         editableKeys,
-        onChange: (keys) => {
-          setEditableRowKeys(keys);
-        },
-        onValuesChange: (record, recordList) => {
-          setValues(recordList);
-        },
-        actionRender: (row, _, dom) => {
-          return [dom.delete];
-        },
+        onChange: (keys) => setEditableRowKeys(keys),
+        actionRender: (row, _, dom) => [dom.delete],
       }}
     />
   );

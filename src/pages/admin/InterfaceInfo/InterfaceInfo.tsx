@@ -78,7 +78,7 @@ const columnsMap: Record<string, ProColumns<API.InterfaceParam>[]> = {
     },
     {
       title: '最大长度',
-      dataIndex: 'length',
+      dataIndex: 'maxLength',
     },
     {
       title: '描述',
@@ -198,7 +198,7 @@ const InterfaceInfo: React.FC = () => {
       if (res.data) {
         setInterfaceInfo(res.data);
         const { requestParams, requestHeaders, responseParams, errorCode } = res.data;
-        setResponseParams(requestParams || []);
+        setRequestParams(requestParams || []);
         setRequestHeaders(requestHeaders || []);
         setResponseParams(responseParams || []);
         setErrorCode(errorCode || []);
@@ -232,6 +232,10 @@ const InterfaceInfo: React.FC = () => {
   );
 
   const interfaceParamTypes: TabsProps['items'] = [
+    {
+      key: '-1',
+      label: 'adf',
+    },
     {
       key: '0',
       label: '请求参数',
@@ -340,7 +344,7 @@ const InterfaceInfo: React.FC = () => {
           placeholder="请选择"
         />
         <ProForm.Item name="dataSource" trigger="onValuesChange">
-          <Tabs defaultActiveKey="1" items={interfaceParamTypes} />
+          <Tabs defaultActiveKey={'-1'} items={interfaceParamTypes} />
         </ProForm.Item>
       </ProForm>
     </PageContainer>

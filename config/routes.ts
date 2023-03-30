@@ -29,6 +29,25 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/interface',
+    name: '接口列表',
+    icon: 'unorderedList',
+    routes: [
+      {
+        path: '/interface',
+        redirect: '/interface/list',
+      },
+      {
+        path: '/interface/list',
+        component: './InterfaceList',
+      },
+      {
+        path: '/interface/info/:id',
+        component: './InterfaceInfo',
+      },
+    ],
+  },
+  {
     path: '/admin',
     name: '管理页',
     icon: 'setting',
