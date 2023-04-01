@@ -1,4 +1,5 @@
 import InterfaceParamTable from '@/pages/admin/InterfaceInfo/components/InterfaceParamTable';
+import { contentTypes } from '@/pages/utils/interfaceData';
 import {
   addInterfaceInfoUsingPOST,
   getInterfaceInfoByIdUsingGET,
@@ -18,15 +19,6 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 const { Option } = Select;
-
-const contentTypeList = [
-  { label: 'application/json', value: 0 },
-  { label: 'application/x-wwww-form-urlencoded', value: 1 },
-  { label: 'multipart/form-data', value: 2 },
-  { label: 'application/xml', value: 3 },
-  { label: 'text/plain', value: 4 },
-  { label: '*/*', value: 5 },
-];
 
 const columnsMap: Record<string, ProColumns<API.InterfaceParam>[]> = {
   '0': [
@@ -340,7 +332,7 @@ const InterfaceInfo: React.FC = () => {
           name="contentType"
           width={'md'}
           label="ContentType"
-          options={contentTypeList}
+          options={contentTypes}
           placeholder="请选择"
         />
         <ProForm.Item name="dataSource" trigger="onValuesChange">

@@ -1,3 +1,4 @@
+import { methodTags } from '@/pages/utils/interfaceData';
 import {
   deleteInterfaceInfoUsingDELETE,
   getInterfaceInfoPagesUsingGET,
@@ -8,31 +9,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button, message, Space, Tag } from 'antd';
+import { Button, message } from 'antd';
 import React, { useRef } from 'react';
-
-const methodTags = [
-  <Space key={'get'}>
-    <Tag color={'green'} key={'get'}>
-      GET
-    </Tag>
-  </Space>,
-  <Space key={'post'}>
-    <Tag color={'orange'} key={'post'}>
-      POST
-    </Tag>
-  </Space>,
-  <Space key={'put'}>
-    <Tag color={'blue'} key={'put'}>
-      PUT
-    </Tag>
-  </Space>,
-  <Space key={'del'}>
-    <Tag color={'red'} key={'del'}>
-      DELETE
-    </Tag>
-  </Space>,
-];
 
 const TableList: React.FC = () => {
   /**

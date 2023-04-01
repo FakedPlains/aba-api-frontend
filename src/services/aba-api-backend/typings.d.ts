@@ -172,7 +172,7 @@ declare namespace API {
     isDelete?: number;
     isRequired?: number;
     maxLength?: number;
-    name?: string;
+    name: string;
     parentId?: number;
     style?: number;
     type?: number;
