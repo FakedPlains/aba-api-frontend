@@ -89,6 +89,14 @@ export async function loginUsingPOST(body: API.UserLoginDTO, options?: { [key: s
   });
 }
 
+/** logout POST /api/user/logout */
+export async function logoutUsingPOST(options?: { [key: string]: any }) {
+  return request<API.ResponseResultboolean>('/api/user/logout', {
+    method: 'POST',
+    ...(options || {}),
+  });
+}
+
 /** getUserPage GET /api/user/page */
 export async function getUserPageUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

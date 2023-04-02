@@ -167,12 +167,12 @@ declare namespace API {
   type InterfaceParam = {
     createTime?: string;
     description?: string;
-    id: number;
+    id?: number;
     interfaceInfoId?: number;
     isDelete?: number;
     isRequired?: number;
     maxLength?: number;
-    name: string;
+    name?: string;
     parentId?: number;
     style?: number;
     type?: number;
@@ -280,13 +280,13 @@ declare namespace API {
 
   type RequestHeader = {
     description?: string;
-    isRequired?: number;
+    isRequired?: boolean;
     name: string;
   };
 
   type RequestParam = {
     description?: string;
-    isRequired?: number;
+    isRequired?: boolean;
     maxLength?: number;
     name: string;
     style?: number;
