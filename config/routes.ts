@@ -106,6 +106,12 @@ export default [
     ],
   },
   {
+    path: '/account/settings',
+    name: '个人设置 ',
+    component: './User/settings',
+    hideInMenu: true,
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },
