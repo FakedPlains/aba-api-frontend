@@ -55,12 +55,28 @@ export default [
     routes: [
       {
         path: '/admin',
-        redirect: '/admin/sub-page',
+        redirect: '/admin/dashboard',
       },
       {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
+        path: '/admin/dashboard',
+        name: 'Dashboard',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/admin/dashboard',
+            redirect: '/admin/dashboard/analysis',
+          },
+          {
+            path: '/admin/dashboard/analysis',
+            name: '分析页',
+            component: './admin/dashboard/analysis',
+          },
+          {
+            path: '/admin/dashboard/monitor',
+            name: '监控页',
+            component: './admin/dashboard/monitor',
+          },
+        ],
       },
       {
         path: '/admin/user',
