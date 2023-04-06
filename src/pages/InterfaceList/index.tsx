@@ -1,3 +1,4 @@
+import { methodTags } from '@/pages/utils/interfaceData';
 import { getShowingInterfaceInfoUsingGET } from '@/services/aba-api-backend/interfaceInfoController';
 import { PageContainer, ProList } from '@ant-design/pro-components';
 import { Space, Tag } from 'antd';
@@ -39,21 +40,15 @@ const InterfaceList: React.FC = () => {
           title: {
             dataIndex: 'name',
           },
-          /*avatar: {
-            dataIndex: 'image',
-          },*/
-          description: {
-            dataIndex: 'desc',
-          },
           content: {
             dataIndex: 'description',
           },
           subTitle: {
-            render: () => {
+            render: (text, row) => {
               return (
                 <Space size={0}>
-                  <Tag color="blue">Ant Design</Tag>
-                  <Tag color="#5BD8A6">TechUI</Tag>
+                  <Tag color="blue">作者：{row.userAccount}</Tag>
+                  {methodTags[row.method || 0]}
                 </Space>
               );
             },

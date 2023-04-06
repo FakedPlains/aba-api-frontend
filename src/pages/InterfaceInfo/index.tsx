@@ -1,3 +1,4 @@
+import Example from '@/pages/InterfaceInfo/components/Example';
 import { contentTypes, methodTags } from '@/pages/utils/interfaceData';
 import { getInterfaceInfoByIdUsingGET } from '@/services/aba-api-backend/interfaceInfoController';
 import { PageContainer, ProDescriptions, RouteContext } from '@ant-design/pro-components';
@@ -36,7 +37,7 @@ const InterfaceInfo: React.FC = () => {
     <RouteContext.Consumer>
       {({ isMobile }) => (
         <ProDescriptions className={styles.headerList} size="small" column={isMobile ? 1 : 2}>
-          <ProDescriptions.Item label="创建人">{interfaceInfo?.userId}</ProDescriptions.Item>
+          <ProDescriptions.Item label="创建人">{interfaceInfo?.userAccount}</ProDescriptions.Item>
           <ProDescriptions.Item label="dataId">{interfaceInfo?.dataId}</ProDescriptions.Item>
           <ProDescriptions.Item label="请求方式">
             {methodTags[interfaceInfo?.method || 0]}
@@ -67,6 +68,11 @@ const InterfaceInfo: React.FC = () => {
       tab: '在线调用',
       key: 'invoke',
       children: <Invoke interfaceInfo={interfaceInfo || {}} />,
+    },
+    {
+      tab: '示例代码',
+      key: 'example',
+      children: <Example />,
     },
   ];
 

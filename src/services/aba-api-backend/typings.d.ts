@@ -181,6 +181,7 @@ declare namespace API {
     status?: number;
     updateTime?: string;
     url?: string;
+    userAccount?: string;
     userId?: number;
   };
 

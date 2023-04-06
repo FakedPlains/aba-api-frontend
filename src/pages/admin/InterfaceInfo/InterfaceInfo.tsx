@@ -225,10 +225,6 @@ const InterfaceInfo: React.FC = () => {
 
   const interfaceParamTypes: TabsProps['items'] = [
     {
-      key: '-1',
-      label: 'adf',
-    },
-    {
       key: '0',
       label: '请求参数',
       children: (
