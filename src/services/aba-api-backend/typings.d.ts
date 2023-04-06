@@ -64,12 +64,27 @@ declare namespace API {
     current?: number;
     description?: string;
     id?: number;
-    method?: string;
+    method?: number;
     name?: string;
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    sortOrderIsAsc?: boolean;
+    status?: number;
+    updateTime?: string;
+    url?: string;
+    userId?: number;
+  };
+
+  type getShowingInterfaceInfoUsingGETParams = {
+    createTime?: string;
+    current?: number;
+    description?: string;
+    id?: number;
+    method?: number;
+    name?: string;
+    pageSize?: number;
+    sortField?: string;
+    sortOrder?: string;
     status?: number;
     updateTime?: string;
     url?: string;
@@ -94,13 +109,10 @@ declare namespace API {
   type getUserPageUsingGETParams = {
     createTime?: string;
     current?: number;
-    gender?: number;
     id?: number;
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    sortOrderIsAsc?: boolean;
-    updateTime?: string;
     userAccount?: string;
     userName?: string;
     userRole?: string;
@@ -131,6 +143,14 @@ declare namespace API {
     requestParams?: RequestParam[];
     responseParams?: ResponseParam[];
     url: string;
+  };
+
+  type InterfaceInfoInvokeDTO = {
+    bodyParams?: string;
+    headerParams?: Record<string, any>;
+    id: number;
+    pathParams?: Record<string, any>;
+    queryParams?: Record<string, any>;
   };
 
   type InterfaceInfoUpdateDTO = {
@@ -164,6 +184,11 @@ declare namespace API {
     userId?: number;
   };
 
+  type InterfaceInvokeVO = {
+    responseBody?: string;
+    responseHeaders?: Record<string, any>;
+  };
+
   type InterfaceParam = {
     createTime?: string;
     description?: string;
@@ -184,12 +209,11 @@ declare namespace API {
     current?: number;
     description?: string;
     id?: number;
-    method?: string;
+    method?: number;
     name?: string;
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    sortOrderIsAsc?: boolean;
     status?: number;
     updateTime?: string;
     url?: string;
@@ -204,7 +228,6 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    sortOrderIsAsc?: boolean;
     status?: number;
     totalNum?: number;
     userId?: number;
@@ -218,7 +241,6 @@ declare namespace API {
     pageSize?: number;
     sortField?: string;
     sortOrder?: string;
-    sortOrderIsAsc?: boolean;
     status?: number;
     totalNum?: number;
     userId?: number;
@@ -323,6 +345,14 @@ declare namespace API {
     timestamp?: number;
   };
 
+  type ResponseResultInterfaceInvokeVO = {
+    code?: string;
+    data?: InterfaceInvokeVO;
+    message?: string;
+    success?: boolean;
+    timestamp?: number;
+  };
+
   type ResponseResultListDictData = {
     code?: string;
     data?: DictData[];
@@ -420,6 +450,7 @@ declare namespace API {
   };
 
   type SimpleUser = {
+    accessKey?: string;
     gender?: number;
     id?: number;
     permissions?: string[];
@@ -492,13 +523,16 @@ declare namespace API {
   };
 
   type UserUpdateDTO = {
-    gender?: number;
     id: number;
-    userAccount?: string;
     userAvatar?: string;
     userName?: string;
-    userPassword?: string;
-    userRole?: string;
+  };
+
+  type UserUpdatePasswordRequest = {
+    id: number;
+    newPassword: string;
+    oldPassword: string;
+    repeatPassword: string;
   };
 
   type UserVO = {

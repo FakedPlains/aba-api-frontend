@@ -1,20 +1,9 @@
-import {Button, message} from "antd";
-import React, {useRef, useState} from "react";
-import type {Key} from "react";
-import {
-  PageContainer,
-  ProTable,
-} from "@ant-design/pro-components";
-import type {ActionType, ProColumns} from "@ant-design/pro-components";
-import {PlusOutlined} from "@ant-design/icons";
-import {
-  addUserUsingPOST,
-  deleteUserUsingDELETE,
-  getUserPageUsingGET,
-  updateUserUsingPUT
-} from "@/services/aba-api-backend/userController";
-import CreateModal from "@/pages/admin/User/components/CreateModal";
-
+import CreateModal from '@/pages/admin/User/components/CreateModal';
+import { addUserUsingPOST, getUserPageUsingGET } from '@/services/aba-api-backend/userController';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
+import { message } from 'antd';
+import React, { useRef, useState } from 'react';
 
 const columns: ProColumns<API.UserVO>[] = [
   {
@@ -31,12 +20,9 @@ const columns: ProColumns<API.UserVO>[] = [
     dataIndex: 'userAccount',
   },
   {
-    title: '用户性别',
-    dataIndex: 'gender',
-  },
-  {
     title: '用户角色',
     dataIndex: 'userRole',
+    hideInSearch: true,
   },
   {
     title: '创建时间',
@@ -46,7 +32,6 @@ const columns: ProColumns<API.UserVO>[] = [
     sorter: true,
     hideInSearch: true,
     hideInForm: true,
-    editable: false,
   },
   {
     title: '更新时间',
@@ -56,7 +41,6 @@ const columns: ProColumns<API.UserVO>[] = [
     sorter: true,
     hideInSearch: true,
     hideInForm: true,
-    editable: false,
   },
   /*{
     title: '创建时间',
@@ -77,14 +61,14 @@ const columns: ProColumns<API.UserVO>[] = [
     title: '操作',
     valueType: 'option',
     key: 'option',
-    render: (text, record, _, action) => [
+    render: (text, record) => [
       <a
-        key="editable"
+        key="lock"
         onClick={() => {
-          action?.startEditable?.(record.id as Key);
+          console.log(text, record);
         }}
       >
-        编辑
+        锁定
       </a>,
     ],
   },
@@ -112,7 +96,7 @@ const User: React.FC = () => {
     }
   };
 
-  const handleDelete = async (fields: API.DeleteDTO) => {
+  /*const handleDelete = async (fields: API.DeleteDTO) => {
     const hide = message.loading('正在删除');
     try {
       await deleteUserUsingDELETE({
@@ -127,9 +111,9 @@ const User: React.FC = () => {
       message.error('删除失败' + error.message);
       return false;
     }
-  };
+  };*/
 
-  const handleUpdate = async (fields: API.UserUpdateDTO) => {
+  /*const handleUpdate = async (fields: API.UserUpdateDTO) => {
     const hide = message.loading('正在更新');
     try {
       await updateUserUsingPUT({
@@ -144,7 +128,7 @@ const User: React.FC = () => {
       message.error('更新失败' + error.message);
       return false;
     }
-  };
+  };*/
 
   return (
     <div
@@ -157,9 +141,9 @@ const User: React.FC = () => {
           columns={columns}
           actionRef={actionRef}
           cardBordered
-          request={async (params = {}, sort, filter) => {
+          request={async (params, sort, filter) => {
             console.log(params, sort, filter);
-            const res = await getUserPageUsingGET({...params});
+            const res = await getUserPageUsingGET({ ...params });
             if (res.data) {
               return {
                 data: res.data.records || [],
@@ -173,21 +157,6 @@ const User: React.FC = () => {
               total: 0,
             };
           }}
-          editable={{
-            onSave: (key: number, record: API.UserVO, originRow: API.UserVO) => {
-              return handleUpdate({...record, id: key})
-            },
-            onDelete: (key) => {
-              return handleDelete({id: key as number})
-            }
-          }}
-          columnsState={{
-            persistenceKey: 'pro-table-singe-demos',
-            persistenceType: 'localStorage',
-            onChange(value) {
-              console.log('value: ', value);
-            },
-          }}
           rowKey="id"
           search={{
             labelWidth: 'auto',
@@ -197,29 +166,21 @@ const User: React.FC = () => {
               listsHeight: 400,
             },
           }}
-          /*form={{
-            // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-            syncToUrl: (values, type) => {
-              if (type === 'get') {
-                return {
-                  ...values,
-                  created_at: [values.startTime, values.endTime],
-                };
-              }
-              return values;
-            },
-          }}*/
           pagination={{
             pageSize: 5,
-            onChange: (page) => console.log(page),
           }}
           dateFormatter="string"
           headerTitle="用户数据"
-          toolBarRender={() => [
-            <Button key="button" icon={<PlusOutlined/>} type="primary" onClick={() => handleCreateModalOpen(true)}>
+          /* toolBarRender={() => [
+            <Button
+              key="button"
+              icon={<PlusOutlined />}
+              type="primary"
+              onClick={() => handleCreateModalOpen(true)}
+            >
               新建
             </Button>,
-          ]}
+          ]}*/
         />
         <CreateModal
           columns={columns}
@@ -234,6 +195,6 @@ const User: React.FC = () => {
       </PageContainer>
     </div>
   );
-}
+};
 
 export default User;

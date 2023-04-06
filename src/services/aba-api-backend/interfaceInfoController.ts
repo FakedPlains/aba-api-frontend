@@ -89,6 +89,21 @@ export async function onlineInterfaceInfoUsingPOST(
   });
 }
 
+/** invokeInterface POST /api/interface/info/invoke */
+export async function invokeInterfaceUsingPOST(
+  body: API.InterfaceInfoInvokeDTO,
+  options?: { [key: string]: any },
+) {
+  return request<API.ResponseResultInterfaceInvokeVO>('/api/interface/info/invoke', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** listInterfaceInfo GET /api/interface/info/list */
 export async function listInterfaceInfoUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -104,13 +119,28 @@ export async function listInterfaceInfoUsingGET(
   });
 }
 
-/** getInterfaceInfoPages GET /api/interface/info/page */
+/** getShowingInterfaceInfo GET /api/interface/info/page */
+export async function getShowingInterfaceInfoUsingGET(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getShowingInterfaceInfoUsingGETParams,
+  options?: { [key: string]: any },
+) {
+  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/page', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
+
+/** getInterfaceInfoPages GET /api/interface/info/show */
 export async function getInterfaceInfoPagesUsingGET(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getInterfaceInfoPagesUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/page', {
+  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/show', {
     method: 'GET',
     params: {
       ...params,

@@ -112,6 +112,21 @@ export async function getUserPageUsingGET(
   });
 }
 
+/** updatePassword PUT /api/user/pass */
+export async function updatePasswordUsingPUT(
+  body: API.UserUpdatePasswordRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.ResponseResultboolean>('/api/user/pass', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** register POST /api/user/register */
 export async function registerUsingPOST(
   body: API.UserRegisterDTO,
@@ -123,6 +138,14 @@ export async function registerUsingPOST(
       'Content-Type': 'application/json',
     },
     data: body,
+    ...(options || {}),
+  });
+}
+
+/** getSecretKey POST /api/user/secretKey */
+export async function getSecretKeyUsingPOST(options?: { [key: string]: any }) {
+  return request<API.ResponseResultstring>('/api/user/secretKey', {
+    method: 'POST',
     ...(options || {}),
   });
 }

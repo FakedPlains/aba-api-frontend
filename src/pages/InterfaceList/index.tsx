@@ -1,4 +1,4 @@
-import { getInterfaceInfoPagesUsingGET } from '@/services/aba-api-backend/interfaceInfoController';
+import { getShowingInterfaceInfoUsingGET } from '@/services/aba-api-backend/interfaceInfoController';
 import { PageContainer, ProList } from '@ant-design/pro-components';
 import { Space, Tag } from 'antd';
 import React from 'react';
@@ -20,7 +20,7 @@ const InterfaceList: React.FC = () => {
         rowKey="name"
         // dataSource={dataSource}
         request={async () => {
-          const res = await getInterfaceInfoPagesUsingGET({});
+          const res = await getShowingInterfaceInfoUsingGET({ current: 1, pageSize: 10 });
           if (res.data) {
             return {
               success: true,

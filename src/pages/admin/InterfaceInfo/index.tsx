@@ -9,7 +9,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import React, { useRef } from 'react';
 
 const TableList: React.FC = () => {
@@ -104,11 +104,13 @@ const TableList: React.FC = () => {
       title: 'url',
       dataIndex: 'url',
       valueType: 'text',
+      hideInSearch: true,
     },
     {
       title: '方法',
       dataIndex: 'method',
       render: (_, record) => methodTags[record.method || 0],
+      hideInSearch: true,
     },
     {
       title: '状态',
@@ -130,14 +132,14 @@ const TableList: React.FC = () => {
       sorter: true,
       dataIndex: 'createTime',
       valueType: 'dateTime',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '更新时间',
       sorter: true,
       dataIndex: 'updateTime',
       valueType: 'dateTime',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '操作',
@@ -150,7 +152,7 @@ const TableList: React.FC = () => {
         record.status === 0 ? (
           <Button
             key="online"
-            type={'text'}
+            type={'link'}
             onClick={async () => {
               if (record.id !== undefined) {
                 await handleOnline(record.id);
@@ -162,7 +164,7 @@ const TableList: React.FC = () => {
         ) : (
           <Button
             key="offline"
-            type={'text'}
+            type={'link'}
             danger
             onClick={async () => {
               if (record.id !== undefined) {
@@ -173,16 +175,20 @@ const TableList: React.FC = () => {
             下线
           </Button>
         ),
-        <Button
+        <Popconfirm
           key="delete"
-          type={'text'}
-          danger
-          onClick={async () => {
+          title="删除接口信息"
+          description="确定删除?"
+          onConfirm={async () => {
             await handleRemove(record);
           }}
+          okText="确定"
+          cancelText="取消"
         >
-          删除
-        </Button>,
+          <Button type={'link'} danger>
+            删除
+          </Button>
+        </Popconfirm>,
       ],
     },
   ];
@@ -207,7 +213,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-        request={async (params: { pageSize?: number; current?: number; keyword?: string }) => {
+        request={async (params) => {
           const res = await getInterfaceInfoPagesUsingGET({
             ...params,
           });
