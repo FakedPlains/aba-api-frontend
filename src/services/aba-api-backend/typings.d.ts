@@ -54,6 +54,11 @@ declare namespace API {
     typeId: number;
   };
 
+  type getInterfaceChargingByInterfaceIdUsingGETParams = {
+    /** interfaceId */
+    interfaceId: number;
+  };
+
   type getInterfaceInfoByIdUsingGETParams = {
     /** id */
     id: number;
@@ -116,6 +121,24 @@ declare namespace API {
     userAccount?: string;
     userName?: string;
     userRole?: string;
+  };
+
+  type InterfaceCharging = {
+    createTime?: string;
+    freeCount?: number;
+    id?: number;
+    interfaceInfoId?: number;
+    isCharge?: number;
+    isDelete?: number;
+    price?: number;
+    updateTime?: string;
+  };
+
+  type InterfaceChargingRequest = {
+    freeCount?: number;
+    interfaceInfoId: number;
+    isCharge?: number;
+    price?: number;
   };
 
   type InterfaceInfo = {
@@ -339,6 +362,14 @@ declare namespace API {
     timestamp?: number;
   };
 
+  type ResponseResultInterfaceCharging = {
+    code?: string;
+    data?: InterfaceCharging;
+    message?: string;
+    success?: boolean;
+    timestamp?: number;
+  };
+
   type ResponseResultInterfaceInfoVO = {
     code?: string;
     data?: InterfaceInfoVO;
@@ -446,6 +477,13 @@ declare namespace API {
   type ResponseResultUserInterfaceInfo = {
     code?: string;
     data?: UserInterfaceInfo;
+    message?: string;
+    success?: boolean;
+    timestamp?: number;
+  };
+
+  type ResponseResultVoid = {
+    code?: string;
     message?: string;
     success?: boolean;
     timestamp?: number;

@@ -1,4 +1,9 @@
+import ChargingModal from '@/pages/admin/InterfaceInfo/components/ChargingModal';
 import { methodTags } from '@/pages/utils/interfaceData';
+import {
+  addInterfaceChargingUsingPOST,
+  getInterfaceChargingByInterfaceIdUsingGET,
+} from '@/services/aba-api-backend/interfaceChargingController';
 import {
   deleteInterfaceInfoUsingDELETE,
   getInterfaceInfoPagesUsingGET,
@@ -10,7 +15,7 @@ import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
 import { Button, Dropdown, message, Popconfirm, Space } from 'antd';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 const TableList: React.FC = () => {
   /**
@@ -18,6 +23,9 @@ const TableList: React.FC = () => {
    * @zh-CN 分布更新窗口的弹窗
    * */
   const actionRef = useRef<ActionType>();
+
+  const [chargingModalOpen, handleChargingModalOpen] = useState<boolean>(false);
+  const [currentCharging, setCurrentCharging] = useState<API.InterfaceCharging>();
 
   /**
    *  Delete node
@@ -85,6 +93,24 @@ const TableList: React.FC = () => {
     } catch (error: any) {
       hide();
       message.error('删除失败，' + error.message);
+      return false;
+    }
+  };
+
+  const handleInterfaceCharging = async (values: API.InterfaceChargingRequest) => {
+    const hide = message.loading('正在配置');
+    try {
+      await addInterfaceChargingUsingPOST({
+        ...values,
+        interfaceInfoId: currentCharging?.interfaceInfoId || 0,
+      });
+      hide();
+      message.success('配置成功');
+      handleChargingModalOpen(false);
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('配置失败，' + error.message);
       return false;
     }
   };
@@ -159,16 +185,32 @@ const TableList: React.FC = () => {
               {
                 key: 'edit',
                 label: (
-                  <a
-                    key="edit"
-                    onClick={() => history.push(`/admin/interface-info/update/${record.id}`)}
-                  >
+                  <a onClick={() => history.push(`/admin/interface-info/update/${record.id}`)}>
                     修改
                   </a>
                 ),
               },
               {
+                key: 'charging',
+                label: (
+                  <a
+                    onClick={async () => {
+                      const res = await getInterfaceChargingByInterfaceIdUsingGET({
+                        interfaceId: record.id || 0,
+                      });
+                      if (res) {
+                        setCurrentCharging({ ...res.data, interfaceInfoId: record.id });
+                      }
+                      handleChargingModalOpen(true);
+                    }}
+                  >
+                    配置计费
+                  </a>
+                ),
+              },
+              {
                 key: 'onoff',
+                danger: record.status === 1,
                 label:
                   record.status === 0 ? (
                     <a
@@ -224,6 +266,7 @@ const TableList: React.FC = () => {
       ],
     },
   ];
+
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
@@ -262,6 +305,12 @@ const TableList: React.FC = () => {
             total: 0,
           };
         }}
+      />
+      <ChargingModal
+        data={currentCharging}
+        visible={chargingModalOpen}
+        onSubmit={handleInterfaceCharging}
+        onCancel={() => handleChargingModalOpen(false)}
       />
     </PageContainer>
   );
