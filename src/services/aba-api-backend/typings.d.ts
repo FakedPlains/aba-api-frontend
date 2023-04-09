@@ -194,7 +194,9 @@ declare namespace API {
     dataId?: string;
     description?: string;
     errorCode?: InterfaceParam[];
+    hasFree?: number;
     id?: number;
+    interfaceCharging?: InterfaceCharging;
     isDelete?: number;
     method?: number;
     name?: string;
@@ -526,6 +528,7 @@ declare namespace API {
 
   type UserInterfaceInfo = {
     createTime?: string;
+    hasFree?: number;
     id?: number;
     interfaceInfoId?: number;
     isDelete?: number;

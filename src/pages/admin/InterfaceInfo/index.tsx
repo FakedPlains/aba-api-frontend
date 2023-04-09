@@ -1,8 +1,8 @@
 import ChargingModal from '@/pages/admin/InterfaceInfo/components/ChargingModal';
 import { methodTags } from '@/pages/utils/interfaceData';
 import {
-  addInterfaceChargingUsingPOST,
   getInterfaceChargingByInterfaceIdUsingGET,
+  modifyInterfaceChargingUsingPOST,
 } from '@/services/aba-api-backend/interfaceChargingController';
 import {
   deleteInterfaceInfoUsingDELETE,
@@ -100,7 +100,7 @@ const TableList: React.FC = () => {
   const handleInterfaceCharging = async (values: API.InterfaceChargingRequest) => {
     const hide = message.loading('正在配置');
     try {
-      await addInterfaceChargingUsingPOST({
+      await modifyInterfaceChargingUsingPOST({
         ...values,
         interfaceInfoId: currentCharging?.interfaceInfoId || 0,
       });

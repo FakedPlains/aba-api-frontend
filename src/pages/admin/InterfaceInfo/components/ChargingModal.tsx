@@ -1,6 +1,6 @@
 import { DrawerForm, ProFormDigit } from '@ant-design/pro-components';
 import { ProFormRadio } from '@ant-design/pro-form';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 export type Props = {
   data: API.InterfaceCharging | undefined;
@@ -13,6 +13,10 @@ const ChargingModal: React.FC<Props> = (props) => {
   const { data, visible, onCancel, onSubmit } = props;
 
   const [isCharge, setIsCharge] = useState<number>(data?.isCharge || 0);
+
+  useEffect(() => {
+    setIsCharge(data?.isCharge || 0);
+  }, [data]);
 
   return (
     <DrawerForm

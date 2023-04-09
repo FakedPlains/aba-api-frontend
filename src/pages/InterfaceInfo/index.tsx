@@ -3,7 +3,7 @@ import { contentTypes, methodTags } from '@/pages/utils/interfaceData';
 import { getInterfaceInfoByIdUsingGET } from '@/services/aba-api-backend/interfaceInfoController';
 import { PageContainer, ProDescriptions, RouteContext } from '@ant-design/pro-components';
 import { useParams } from '@umijs/max';
-import { message } from 'antd';
+import { Button, message, Statistic } from 'antd';
 import React, { useEffect, useState } from 'react';
 import Info from './components/Info';
 import Invoke from './components/Invoke';
@@ -33,6 +33,19 @@ const InterfaceInfo: React.FC = () => {
     loadData();
   }, [id]);
 
+  const action = [
+    interfaceInfo?.hasFree === 1 ? (
+      <Button key={'free'}>激活免费试用</Button>
+    ) : (
+      <Button disabled key={'free'}>
+        已试用
+      </Button>
+    ),
+    <Button key={'buy'} type={'primary'}>
+      立即购买
+    </Button>,
+  ];
+
   const description = (
     <RouteContext.Consumer>
       {({ isMobile }) => (
@@ -50,6 +63,18 @@ const InterfaceInfo: React.FC = () => {
         </ProDescriptions>
       )}
     </RouteContext.Consumer>
+  );
+
+  const extraContent = (
+    <div className={styles.moreInfo}>
+      <Statistic title="免费调用次数" value={interfaceInfo?.interfaceCharging?.freeCount} />
+      <Statistic
+        title="单价"
+        value={interfaceInfo?.interfaceCharging?.price}
+        prefix="¥"
+        suffix={'元/次'}
+      />
+    </div>
   );
 
   const [tabStatus, seTabStatus] = useState<string>('info');
@@ -80,10 +105,10 @@ const InterfaceInfo: React.FC = () => {
     <PageContainer
       title={interfaceInfo?.name}
       loading={loading}
-      // extra={action}
+      extra={action}
       className={styles.pageHeader}
       content={description}
-      // extraContent={extra}
+      extraContent={extraContent}
       tabActiveKey={tabStatus}
       onTabChange={onTabChange}
       tabList={tabList}

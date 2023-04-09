@@ -17,8 +17,8 @@ export async function updateInterfaceChargingUsingPUT(
   });
 }
 
-/** addInterfaceCharging POST /api/interface/charging */
-export async function addInterfaceChargingUsingPOST(
+/** modifyInterfaceCharging POST /api/interface/charging */
+export async function modifyInterfaceChargingUsingPOST(
   body: API.InterfaceChargingRequest,
   options?: { [key: string]: any },
 ) {
