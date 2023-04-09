@@ -5,11 +5,11 @@ import {
   offlineInterfaceInfoUsingPOST,
   onlineInterfaceInfoUsingPOST,
 } from '@/services/aba-api-backend/interfaceInfoController';
-import { PlusOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { history } from '@umijs/max';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, Dropdown, message, Popconfirm, Space } from 'antd';
 import React, { useRef } from 'react';
 
 const TableList: React.FC = () => {
@@ -89,7 +89,7 @@ const TableList: React.FC = () => {
     }
   };
 
-  const columns: ProColumns<API.InterfaceInfo>[] = [
+  const columns: ProColumns<API.InterfaceInfoVO>[] = [
     {
       title: '接口名称',
       dataIndex: 'name',
@@ -111,6 +111,12 @@ const TableList: React.FC = () => {
       dataIndex: 'method',
       render: (_, record) => methodTags[record.method || 0],
       hideInSearch: true,
+    },
+    {
+      title: '接口调用次数',
+      dataIndex: 'totalInvokeCount',
+      hideInSearch: true,
+      sorter: true,
     },
     {
       title: '状态',
@@ -146,49 +152,75 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a key="edit" onClick={() => history.push(`/admin/interface-info/update/${record.id}`)}>
-          修改
-        </a>,
-        record.status === 0 ? (
-          <Button
-            key="online"
-            type={'link'}
-            onClick={async () => {
-              if (record.id !== undefined) {
-                await handleOnline(record.id);
-              }
-            }}
-          >
-            发布
-          </Button>
-        ) : (
-          <Button
-            key="offline"
-            type={'link'}
-            danger
-            onClick={async () => {
-              if (record.id !== undefined) {
-                await handleOffline(record.id);
-              }
-            }}
-          >
-            下线
-          </Button>
-        ),
-        <Popconfirm
-          key="delete"
-          title="删除接口信息"
-          description="确定删除?"
-          onConfirm={async () => {
-            await handleRemove(record);
+        <a key="monitor">监控</a>,
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: 'edit',
+                label: (
+                  <a
+                    key="edit"
+                    onClick={() => history.push(`/admin/interface-info/update/${record.id}`)}
+                  >
+                    修改
+                  </a>
+                ),
+              },
+              {
+                key: 'onoff',
+                label:
+                  record.status === 0 ? (
+                    <a
+                      onClick={async () => {
+                        if (record.id !== undefined) {
+                          await handleOnline(record.id);
+                        }
+                      }}
+                    >
+                      发布
+                    </a>
+                  ) : (
+                    <a
+                      onClick={async () => {
+                        if (record.id !== undefined) {
+                          await handleOffline(record.id);
+                        }
+                      }}
+                    >
+                      下线
+                    </a>
+                  ),
+              },
+              {
+                key: 'delete',
+                danger: true,
+                label: (
+                  <Popconfirm
+                    key="delete"
+                    title="删除接口信息"
+                    description="确定删除?"
+                    onConfirm={async () => {
+                      await handleRemove(record);
+                    }}
+                    okText="确定"
+                    cancelText="取消"
+                  >
+                    <a>删除</a>
+                  </Popconfirm>
+                ),
+              },
+            ],
           }}
-          okText="确定"
-          cancelText="取消"
+          key={'more'}
         >
-          <Button type={'link'} danger>
-            删除
-          </Button>
-        </Popconfirm>,
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              更多
+              <DownOutlined />
+            </Space>
+          </a>
+        </Dropdown>,
       ],
     },
   ];

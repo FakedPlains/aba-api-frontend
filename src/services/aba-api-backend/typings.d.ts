@@ -179,6 +179,7 @@ declare namespace API {
     requestParams?: InterfaceParam[];
     responseParams?: InterfaceParam[];
     status?: number;
+    totalInvokeCount?: number;
     updateTime?: string;
     url?: string;
     userAccount?: string;
@@ -262,14 +263,14 @@ declare namespace API {
     column?: string;
   };
 
-  type PageInterfaceInfo = {
+  type PageInterfaceInfoVO = {
     countId?: string;
     current?: number;
     maxLimit?: number;
     optimizeCountSql?: boolean;
     orders?: OrderItem[];
     pages?: number;
-    records?: InterfaceInfo[];
+    records?: InterfaceInfoVO[];
     searchCount?: boolean;
     size?: number;
     total?: number;
@@ -394,9 +395,9 @@ declare namespace API {
     timestamp?: number;
   };
 
-  type ResponseResultPageInterfaceInfo = {
+  type ResponseResultPageInterfaceInfoVO = {
     code?: string;
-    data?: PageInterfaceInfo;
+    data?: PageInterfaceInfoVO;
     message?: string;
     success?: boolean;
     timestamp?: number;

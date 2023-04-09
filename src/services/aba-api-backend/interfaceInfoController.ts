@@ -125,7 +125,7 @@ export async function getShowingInterfaceInfoUsingGET(
   params: API.getShowingInterfaceInfoUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/page', {
+  return request<API.ResponseResultPageInterfaceInfoVO>('/api/interface/info/page', {
     method: 'GET',
     params: {
       ...params,
@@ -140,7 +140,7 @@ export async function getInterfaceInfoPagesUsingGET(
   params: API.getInterfaceInfoPagesUsingGETParams,
   options?: { [key: string]: any },
 ) {
-  return request<API.ResponseResultPageInterfaceInfo>('/api/interface/info/show', {
+  return request<API.ResponseResultPageInterfaceInfoVO>('/api/interface/info/show', {
     method: 'GET',
     params: {
       ...params,

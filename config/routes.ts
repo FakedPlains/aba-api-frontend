@@ -61,7 +61,8 @@ export default [
         path: '/admin/dashboard',
         name: 'Dashboard',
         icon: 'dashboard',
-        routes: [
+        component: './admin/dashboard/analysis',
+        /*routes: [
           {
             path: '/admin/dashboard',
             redirect: '/admin/dashboard/analysis',
@@ -76,7 +77,7 @@ export default [
             name: '监控页',
             component: './admin/dashboard/monitor',
           },
-        ],
+        ],*/
       },
       {
         path: '/admin/user',
