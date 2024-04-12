@@ -11,7 +11,7 @@ const InterfaceParamTable: React.FC<Props> = (props) => {
   const { columns, values, setValues } = props;
 
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    values.map((item) => item.id),
+    values.map((item) => item.id || 1),
   );
 
   return (
@@ -19,6 +19,7 @@ const InterfaceParamTable: React.FC<Props> = (props) => {
       rowKey="id"
       columns={columns}
       value={values}
+      controlled={true}
       recordCreatorProps={{
         newRecordType: 'dataSource',
         position: 'top',

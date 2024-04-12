@@ -22,12 +22,12 @@ export default [
       },
     ],
   },
-  {
+  /*{
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
     component: './Welcome',
-  },
+  },*/
   {
     path: '/interface',
     name: '接口列表',
@@ -130,7 +130,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/interface',
   },
   {
     path: '*',
